@@ -2,6 +2,8 @@
 
 所有字段均经过实际测试验证。标记 ✅ 的可直接使用，标记 ❌ 的会触发 500 错误，**禁止使用**。
 
+> **字段不确定时**：调用 `query_metadata(form_id)` 实时验证。返回结果中 `Key` = 可用字段名，`MustInput=1` = 必填，`IsViewVisible=false` = 已废弃/隐藏，`Extends` = 枚举合法值。本文件记录的是已验证的常用字段子集，不是全量字段。
+
 ---
 
 ## 目录
@@ -26,7 +28,7 @@
 | `FBillNo` | 单据编号 | 如 XSDD2602000386 |
 | `FDate` | 单据日期 | 业务日期，手填 |
 | `FCreateDate` | 创建时间 | 系统自动，精确到毫秒 |
-| `FDocumentStatus` | 单据状态 | A/B/C |
+| `FDocumentStatus` | 单据状态 | Z=暂存, A=创建, B=审核中, C=已审核, D=重新审核 |
 | `FAllAmount` | 含税合计 | ⚠️ **行级字段**，同一单号多行会重复 |
 | `FAmount` | 未税金额 | 表头级 |
 | `FTaxAmount` | 税额 | 表头级 |
@@ -203,18 +205,22 @@
 | `F_JR_KHSR2` | 第二生日（日期） | 部分客户有两个生日 |
 | `F_JR_KHSR2YF` | 第二生日月份 | |
 | `F_JR_JKFS` | 进款方式 | |
-| `F_JR_YWMC` | 业务名称 | |
+| `F_JR_YWMC` | 客户英文名 | 元数据确认为英文名称，非"业务名称" |
 | `FKHLB` | 客户类别（新） | 返回 ID，需映射（见下方） |
 | `FFWZY` | 服务专员（新） | 返回 ID，需映射 |
 | `FKHQY` | 客户区域 | 返回 ID |
 | `F_JKFSNEW` | 进款方式（新） | 返回 ID |
+| `F_JKFSBM` | 结款方式编码 | |
+| `F_ZYQDLXDX` | 主营渠道类型（单选） | |
+| `F_JR_ZYYWDX` | 主营业务（单选） | |
+| `FSOCIALCRECODE` | 统一社会信用代码 | |
 
 ### ❌ 废弃/不存在字段
 
 | 字段名 | 说明 |
 |--------|------|
-| `F_JR_FWZY` | **已废弃**，值为空，用 `FFWZY` |
-| `F_JR_KHLB` | **已废弃**，值为空，用 `FKHLB` |
+| `F_JR_FWZY` | **已废弃**（元数据标记"作废"，IsViewVisible=false），用 `FFWZY` |
+| `F_JR_KHLB` | **已废弃**（元数据标记"作废"，IsViewVisible=false），用 `FKHLB` |
 | `FContact` | 不存在，用 `F_JR_LXR` |
 | `FPhone` | 不存在，用 `F_JR_DH` |
 | `FIsArchive` | 不存在 |
