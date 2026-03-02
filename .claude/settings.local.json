@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__filesystem__directory_tree",
+      "mcp__filesystem__list_directory",
+      "Bash(xargs ls -lh)",
+      "Bash(unzip -p /Users/adamzhang/Projects/kingdee-skills/kingdee.skill.md \"kingdee/SKILL.md\")",
+      "Bash(unzip -p /Users/adamzhang/Projects/kingdee-skills/kingdee-daily-report.skill.md \"kingdee-daily-report/SKILL.md\")",
+      "Bash(unzip -p /Users/adamzhang/Projects/kingdee-skills/kingdee-customer-query.skill.md \"kingdee-customer-query/SKILL.md\")",
+      "Bash(unzip -p kingdee.skill \"kingdee/SKILL.md\")",
+      "Bash(unzip -p kingdee-daily-report.skill \"kingdee-daily-report/SKILL.md\")",
+      "Bash(unzip -p kingdee-customer-query.skill \"kingdee-customer-query/SKILL.md\")",
+      "Bash(zip -r kingdee.skill.new kingdee/)",
+      "Bash(unzip -l kingdee.skill)"
+    ]
+  }
+}
