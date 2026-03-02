@@ -17,7 +17,14 @@
       "Bash(git push -u origin main)",
       "Bash(git add README.md .claude/settings.local.json)",
       "Bash(git commit:*)",
-      "Bash(git push)"
+      "Bash(git push)",
+      "Bash(zip -r kingdee.skill kingdee/)",
+      "Bash(git add kingdee.skill kingdee/SKILL.md kingdee/references/verified-fields.md)",
+      "Bash(gh pr list)",
+      "mcp__kingdee-k3cloud__query_metadata",
+      "Bash(git add kingdee/references/sales-analysis-workflow.md kingdee/references/inventory-analysis-workflow.md kingdee/references/order-tracking-workflow.md kingdee/references/periodic-report-workflow.md kingdee/SKILL.md kingdee.skill)",
+      "Bash(git push origin main)",
+      "Bash(git add .claude/settings.local.json)"
     ]
   }
 }
