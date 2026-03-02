@@ -135,6 +135,10 @@ audit_bill(form_id="SAL_SaleOrder", numbers="XSDD001,XSDD002,XSDD003")
 | 生成经营日报 | `references/daily-report-workflow.md` |
 | 查询客户信息、生日、类别 | `references/customer-query-guide.md` |
 | 遇到 500 错误或其他异常 | `references/common-errors.md` |
+| 按客户/业务员/产品分析销售 | `references/sales-analysis-workflow.md` |
+| 库存总览、预警、呆滞分析 | `references/inventory-analysis-workflow.md` |
+| 订单全流程追踪、逾期预警 | `references/order-tracking-workflow.md` |
+| 生成周报/月报、期间对比 | `references/periodic-report-workflow.md` |
 
 ---
 
