@@ -11,7 +11,13 @@
       "Bash(unzip -p kingdee-daily-report.skill \"kingdee-daily-report/SKILL.md\")",
       "Bash(unzip -p kingdee-customer-query.skill \"kingdee-customer-query/SKILL.md\")",
       "Bash(zip -r kingdee.skill.new kingdee/)",
-      "Bash(unzip -l kingdee.skill)"
+      "Bash(unzip -l kingdee.skill)",
+      "Bash(git remote add origin https://github.com/adamzhang1987/kingdee-skills.git)",
+      "Bash(git branch -M main)",
+      "Bash(git push -u origin main)",
+      "Bash(git add README.md .claude/settings.local.json)",
+      "Bash(git commit:*)",
+      "Bash(git push)"
     ]
   }
 }
