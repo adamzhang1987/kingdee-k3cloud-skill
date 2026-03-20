@@ -1,0 +1,13 @@
+{
+  "name": "kingdee",
+  "displayName": "金蝶云星空 ERP Skill",
+  "description": "Claude Code skill for Kingdee K3Cloud ERP system. Provides query templates, field validation, daily report workflows, and error troubleshooting for K3Cloud API.",
+  "repo": "adamzhang1987/kingdee-skills",
+  "path": "kingdee",
+  "version": "1.0.0",
+  "category": "productivity",
+  "tags": ["erp", "kingdee", "k3cloud", "finance", "inventory", "chinese"],
+  "author": "Adam Zhang",
+  "license": "MIT",
+  "language": "zh-CN"
+}

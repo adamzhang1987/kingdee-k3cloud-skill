@@ -1,0 +1,8 @@
+# 本地 Claude Code 配置（含本地路径权限，不应入库）
+.claude/settings.local.json
+
+# macOS 系统文件
+.DS_Store
+
+# 可选：如改用 CI 打包，取消下行注释以排除构建产物
+# kingdee.skill
