@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate registry.json
+        run: python3 -c "import json, sys; json.load(open('registry.json')); print('registry.json is valid')"
+
+      - name: Check required files exist
+        run: |
+          files=(
+            "kingdee-k3cloud/SKILL.md"
+            "kingdee-k3cloud/references/verified-fields.md"
+            "kingdee-k3cloud/references/common-errors.md"
+            "kingdee.skill"
+          )
+          for f in "${files[@]}"; do
+            [ -f "$f" ] && echo "✓ $f" || { echo "✗ missing: $f"; exit 1; }
+          done
