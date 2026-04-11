@@ -36,15 +36,15 @@ Claude Code + MCP 工具（query_bill_json、view_bill 等）
 
 ### 方式二：手动安装
 
-1. 下载 [kingdee.skill](https://github.com/adamzhang1987/kingdee-skills/raw/main/kingdee.skill)
+1. 下载 [kingdee.skill](https://github.com/adamzhang1987/kingdee-k3cloud-skills/raw/main/kingdee.skill)
 2. 将文件放入 Claude Code 的 skills 目录（通常为 `~/.claude/skills/`）
 3. 重启 Claude Code 使 skill 生效
 
 ### 方式三：从源码安装
 
 ```bash
-git clone https://github.com/adamzhang1987/kingdee-skills.git
-cd kingdee-skills
+git clone https://github.com/adamzhang1987/kingdee-k3cloud-skills.git
+cd kingdee-k3cloud-skills
 # 打包
 zip -r kingdee.skill kingdee/
 # 将 kingdee.skill 复制到 skills 目录
