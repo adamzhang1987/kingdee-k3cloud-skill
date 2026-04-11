@@ -1,7 +1,7 @@
 # Kingdee K3Cloud ERP Skill
 
 [![CI](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Language](https://img.shields.io/badge/language-zh--CN-red.svg)
 
@@ -90,4 +90,4 @@ kingdee-k3cloud/
 
 ## License
 
-[MIT](LICENSE) © Adam Zhang
+[Apache-2.0](LICENSE) © Adam Zhang

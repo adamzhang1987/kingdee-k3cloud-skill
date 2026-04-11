@@ -8,6 +8,6 @@
   "category": "productivity",
   "tags": ["erp", "kingdee", "k3cloud", "finance", "inventory", "chinese"],
   "author": "Adam Zhang",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "language": "zh-CN"
 }
