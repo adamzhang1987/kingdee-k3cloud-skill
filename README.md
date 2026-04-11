@@ -36,17 +36,17 @@ Claude Code + MCP 工具（query_bill_json、view_bill 等）
 
 ### 方式二：手动安装
 
-1. 下载 [kingdee.skill](https://github.com/adamzhang1987/kingdee-k3cloud-skills/raw/main/kingdee.skill)
+1. 下载 [kingdee.skill](https://github.com/adamzhang1987/kingdee-k3cloud-skill/raw/main/kingdee.skill)
 2. 将文件放入 Claude Code 的 skills 目录（通常为 `~/.claude/skills/`）
 3. 重启 Claude Code 使 skill 生效
 
 ### 方式三：从源码安装
 
 ```bash
-git clone https://github.com/adamzhang1987/kingdee-k3cloud-skills.git
-cd kingdee-k3cloud-skills
+git clone https://github.com/adamzhang1987/kingdee-k3cloud-skill.git
+cd kingdee-k3cloud-skill
 # 打包
-zip -r kingdee.skill kingdee/
+zip -r kingdee.skill kingdee-k3cloud/
 # 将 kingdee.skill 复制到 skills 目录
 cp kingdee.skill ~/.claude/skills/
 ```
@@ -54,7 +54,7 @@ cp kingdee.skill ~/.claude/skills/
 ## 目录结构
 
 ```
-kingdee/
+kingdee-k3cloud/
 ├── SKILL.md                                  # 主文件：核心原则、表单速查、字段规则
 └── references/
     ├── verified-fields.md                    # 已验证字段大全（各模块可用/禁用字段）
