@@ -28,7 +28,7 @@
 | `FMinStockQty` / `FLowStockQty` | 不存在，需手动设阈值 | STK_Inventory |
 | `FCustId.FName`（出库单中） | 不存在，从关联订单获取 | SAL_OUTSTOCK |
 | `FAllQty`（出库单中） | 不存在 | SAL_OUTSTOCK |
-| `FContact` / `FPhone` | `F_JR_LXR` / `F_JR_DH` | BD_Customer |
+| `FContact` / `FPhone` | 不存在，联系人/电话在自定义字段中（用 query_metadata 确认） | BD_Customer |
 | `FIsArchive` / `FSaleOrgId` / `FID` | 不存在 | BD_Customer |
 
 ---

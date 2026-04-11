@@ -8,6 +8,26 @@
 
 > **GitHub Topics（建议在仓库 Settings 中设置）：** `claude-code` `skill` `erp` `kingdee` `k3cloud`
 
+## 前提条件
+
+本 Skill 需配合金蝶云星空 MCP Server 使用，推荐 [kingdee-k3cloud-mcp](https://github.com/adamzhang1987/kingdee-k3cloud-mcp)。
+
+**整体架构：**
+```
+Claude Code（安装本 Skill）
+       │ 知识注入（表单ID、字段名、工作流）
+       ↓
+Claude Code + MCP 工具（query_bill_json、view_bill 等）
+       │ Kingdee Web API
+       ↓
+金蝶云星空 K3Cloud
+```
+
+- **Skill（本项目）** = 智能增强层，让 Claude 自动掌握正确的 API 用法，避免字段名错误
+- **MCP Server** = 连接层，提供实际的 API 工具
+
+两者可分别使用，但组合使用效果最佳。
+
 ## 安装方式
 
 ### 方式一：从 Skill Hub 安装（推荐）

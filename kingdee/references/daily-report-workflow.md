@@ -123,8 +123,8 @@ total = sum(o["amount"] for o in orders.values())
 
 ## 日报排除规则
 
-- **少云自购单**：客户名含 `SYZG少云自购`，金额通常为 0，做经营统计时建议排除
-- 可在 filter_string 中追加：`AND FCustId.FName not like '%SYZG少云自购%'`
+- **内部采购单**：如系统中有内部调拨/自购客户，金额通常为 0，做经营统计时建议排除
+- 可在 filter_string 中追加：`AND FCustId.FName not like '%内部客户关键词%'`（替换为实际的内部客户名称特征）
 
 ---
 

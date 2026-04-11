@@ -21,29 +21,36 @@ view_bill(form_id="BD_Customer", number="CTM-0536")
 ```
 query_bill_json(
   form_id="BD_Customer",
-  field_keys="FName,FNumber,F_JR_LXR,F_JR_DH,FKHLB,FFWZY,F_JR_KFYWY",
+  field_keys="FName,FNumber,FKHLB,FFWZY",
   filter_string="FName like '%张三%' or FNumber like '%张三%'"
 )
 ```
 
-### 3. 查询某月生日的所有客户（含两个生日字段）
+> 如有自定义字段（联系人、电话等），用 `query_metadata(form_id="BD_Customer")` 查询后追加到 field_keys 中。
+
+### 3. 查询某月生日的所有客户（含两个生日字段示例）
+
+以下以某部署的自定义生日字段为例，实际字段名通过 `query_metadata` 确认：
 
 ```
 query_bill_json(
   form_id="BD_Customer",
-  field_keys="FName,FNumber,F_JR_KHSR,F_JR_KHSRYF,F_JR_KHSR2,F_JR_KHSR2YF,F_JR_LXR,F_JR_DH,F_JR_KFYWY,FKHLB,FFWZY",
-  filter_string="F_JR_KHSRYF = '3' or F_JR_KHSR2YF = '3'",
+  field_keys="FName,FNumber,F_XX_KHSR,F_XX_KHSRYF,F_XX_KHSR2,F_XX_KHSR2YF,FKHLB,FFWZY",
+  filter_string="F_XX_KHSRYF = '3' or F_XX_KHSR2YF = '3'",
   top_count=2000
 )
 ```
 
-> 月份用字符串，如 `'3'` 代表3月，`'12'` 代表12月。注意同时查两个生日月份字段（F_JR_KHSRYF 和 F_JR_KHSR2YF）。
+> 月份用字符串，如 `'3'` 代表3月，`'12'` 代表12月。如系统有两个生日字段，需用 `or` 同时匹配。
 
 ### 4. 推荐的通用客户信息查询字段组合
 
+基础字段（所有部署通用）：
 ```
-FName,FNumber,FShortName,FCreateDate,FModifyDate,F_JR_LXR,F_JR_DH,F_JR_DZ,F_JR_KFYWY,FKHLB,FFWZY,FKHQY
+FName,FNumber,FShortName,FCreateDate,FModifyDate,FKHLB,FFWZY,FSOCIALCRECODE
 ```
+
+> 联系人、电话、地址等信息通常在自定义字段中，需先通过 `query_metadata` 确认实际字段名后追加。
 
 ---
 
@@ -62,10 +69,10 @@ FName,FNumber,FShortName,FCreateDate,FModifyDate,F_JR_LXR,F_JR_DH,F_JR_DZ,F_JR_K
 
 ## 生日查询注意事项
 
-- 系统有两组生日字段：`F_JR_KHSR` / `F_JR_KHSRYF` 和 `F_JR_KHSR2` / `F_JR_KHSR2YF`
-- 按月筛选时必须同时匹配两组（用 `or` 连接）
-- 月份字段值为字符串类型，如 `'3'`、`'12'`
-- `F_JR_KHSR` 含完整年份，格式为 `1990-03-24T00:00:00`
+- 生日字段通常为自定义字段，字段名因部署而异，先用 `query_metadata` 确认
+- 部分系统有两组生日字段（如主生日和备用生日），按月筛选时需用 `or` 同时匹配
+- 月份字段值通常为字符串类型，如 `'3'`、`'12'`
+- 日期字段含完整年份，格式为 `1990-03-24T00:00:00`
 
 ---
 
@@ -82,8 +89,8 @@ FName,FNumber,FShortName,FCreateDate,FModifyDate,F_JR_LXR,F_JR_DH,F_JR_DZ,F_JR_K
 
 ## 常见电话/联系人字段混淆
 
-| 场景 | 正确字段 | 常见错误 |
+| 场景 | 正确做法 | 常见错误 |
 |------|---------|---------|
-| 查客户手机号 | `F_JR_DH` | `FMobile`（常为空）、`FPhone`（不存在） |
-| 查联系人 | `F_JR_LXR` | `FContact`（不存在） |
-| 查地址 | `F_JR_DZ` | `FAddress`（常为空） |
+| 查客户手机号 | 用 `query_metadata` 找自定义字段 | `FMobile`（常为空）、`FPhone`（不存在） |
+| 查联系人 | 用 `query_metadata` 找自定义字段 | `FContact`（不存在） |
+| 查地址 | 用 `query_metadata` 找自定义字段 | `FAddress`（常为空） |

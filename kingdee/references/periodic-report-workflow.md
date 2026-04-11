@@ -77,7 +77,7 @@ query_bill_json(
 
 二、出库情况
 - 本周出库 XX 笔
-- 按仓库：少云色纱 XX 笔，少云胚纱 YY 笔
+- 按仓库：主仓库 XX 笔，辅仓库 YY 笔（替换为实际仓库名称）
 
 三、采购入库
 - 本周入库 XX 笔
@@ -204,7 +204,7 @@ query_bill_json(
 ## 六、报表生成注意事项
 
 1. **FAllAmount 去重**：客户/业务员维度统计时，必须先按 FBillNo 去重，详见 sales-analysis-workflow.md
-2. **排除自购单**：追加 `AND FCustId.FName not like '%SYZG少云自购%'`
+2. **排除内部采购单**：追加 `AND FCustId.FName not like '%内部客户关键词%'`（替换为实际的内部客户名称特征）
 3. **只统计已审核**：始终加 `FDocumentStatus = 'C'`
 4. **数据量控制**：月度数据建议 `top_count=2000`，超过时分段查询
 5. **出库单日期**：SAL_OUTSTOCK 用 `FCreateDate` 而非 `FDate`
