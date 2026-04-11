@@ -5,9 +5,11 @@
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Language](https://img.shields.io/badge/language-zh--CN-red.svg)
 
-金蝶云星空 ERP 系统的 Claude Code Skill，提供查询、操作最佳实践和常见问题解决方案。
+金蝶云星空 ERP 系统的 Claude Code Skill，为 Claude Code 注入表单字段、查询模式和工作流知识，大幅减少试错次数。
 
 > **GitHub Topics（建议在仓库 Settings 中设置）：** `claude-code` `skill` `erp` `kingdee` `k3cloud`
+
+> **使用其他 AI 客户端？** 本 Skill 是 Claude Code 专属的知识增强插件。如果你使用 Claude Desktop、Cursor、Cline、Cherry Studio、Openclaw 等其他支持 MCP 协议的客户端，直接配置 [kingdee-k3cloud-mcp](https://github.com/adamzhang1987/kingdee-k3cloud-mcp) 即可使用全部工具，无需安装本 Skill。
 
 ## 前提条件
 
@@ -24,10 +26,12 @@ Claude Code + MCP 工具（query_bill_json、view_bill 等）
 金蝶云星空 K3Cloud
 ```
 
-- **Skill（本项目）** = 智能增强层，让 Claude 自动掌握正确的 API 用法，避免字段名错误
-- **MCP Server** = 连接层，提供实际的 API 工具
+> MCP Server 本身兼容所有支持 MCP 协议的客户端（Claude Desktop、Cursor、Cline、Openclaw 等）。本 Skill 仅面向 Claude Code，为其提供额外的领域知识注入。
 
-两者可分别使用，但组合使用效果最佳。
+- **Skill（本项目）** = Claude Code 专属智能增强层，让 Claude 自动掌握正确的 API 用法，避免字段名错误
+- **MCP Server** = 通用连接层，提供实际的 API 工具，适用于所有 MCP 客户端
+
+两者可分别使用，但在 Claude Code 中组合使用效果最佳。
 
 ## 安装方式
 
