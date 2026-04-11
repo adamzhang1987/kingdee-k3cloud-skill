@@ -17,10 +17,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Package skill
-        run: cd kingdee && zip -r ../kingdee.skill .
+        run: cd kingdee-k3cloud && zip -r ../kingdee-k3cloud.skill .
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: kingdee.skill
+          files: kingdee-k3cloud.skill
           generate_release_notes: true
