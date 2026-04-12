@@ -21,6 +21,8 @@
 
 ## 一、销售订单 SAL_SaleOrder
 
+> ⚠️ 以下规则仅适用于 SAL_SaleOrder（销售订单）
+
 ### ✅ 已验证可用字段
 
 | 字段名 | 含义 | 备注 |
@@ -63,6 +65,8 @@
 
 ## 二、销售订单明细字段（表体）
 
+> ⚠️ 以下规则仅适用于 SAL_SaleOrder（销售订单）表体行级字段
+
 以下字段在 `query_bill_json` 中直接使用，返回行级展开数据：
 
 | 字段名 | 含义 | 备注 |
@@ -87,6 +91,7 @@
 
 ## 三、销售出库单 SAL_OUTSTOCK
 
+> ⚠️ 以下规则仅适用于 SAL_OUTSTOCK（销售出库单）
 > ⚠️ 表单ID 是 `SAL_OUTSTOCK`，**不是** `STK_OutStock`（后者会报"业务对象不存在"）
 
 ### ✅ 已验证可用字段
@@ -117,6 +122,7 @@
 
 ## 四、采购入库单 STK_InStock
 
+> ⚠️ 以下规则仅适用于 STK_InStock（采购入库单）
 > ✅ 表单ID `STK_InStock` 正确。注意：`PUR_ReceiveBill`（采购收货单）测试返回空。
 
 ### ✅ 已验证可用字段
@@ -131,6 +137,8 @@
 
 ## 五、采购订单 PUR_PurchaseOrder
 
+> ⚠️ 以下规则仅适用于 PUR_PurchaseOrder（采购订单）
+
 ### ✅ 已验证可用字段
 
 | 字段名 | 含义 |
@@ -143,6 +151,7 @@
 
 ## 六、库存查询 STK_Inventory
 
+> ⚠️ 以下规则仅适用于 STK_Inventory（库存明细视图）
 > ⚠️ `STK_Inventory` 是**库存明细视图**，不是物料档案。字段与 `BD_MATERIAL` 完全不同。
 
 ### ✅ 已验证可用字段
@@ -173,6 +182,8 @@
 ---
 
 ## 七、客户 BD_Customer
+
+> ⚠️ 以下规则仅适用于 BD_Customer（客户档案）
 
 ### ✅ 基础信息字段
 
@@ -239,6 +250,8 @@ query_metadata(form_id="BD_Customer")
 ---
 
 ## 八、物料 BD_MATERIAL
+
+> ⚠️ 以下规则仅适用于 BD_MATERIAL（物料档案）
 
 ### ✅ 已验证可用字段
 
