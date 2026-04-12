@@ -30,6 +30,6 @@ credentials/
 .claude/settings.local.json
 
 # ============================================================
-# 构建产物（CI 会自动生成）
+# 构建产物（由 Release workflow 生成，从 GitHub Releases 下载）
 # ============================================================
-# kingdee.skill  # 取消注释可排除本地构建产物
+*.skill

@@ -21,8 +21,12 @@ jobs:
             "kingdee-k3cloud/SKILL.md"
             "kingdee-k3cloud/references/verified-fields.md"
             "kingdee-k3cloud/references/common-errors.md"
-            "kingdee.skill"
           )
           for f in "${files[@]}"; do
             [ -f "$f" ] && echo "✓ $f" || { echo "✗ missing: $f"; exit 1; }
           done
+
+      - name: Validate registry.json path field
+        run: |
+          path=$(python3 -c "import json; print(json.load(open('registry.json'))['path'])")
+          [ -d "$path" ] && echo "✓ registry.json path '$path' exists" || { echo "✗ registry.json path '$path' not found"; exit 1; }
