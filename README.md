@@ -7,8 +7,6 @@
 
 金蝶云星空 ERP 系统的 Claude Code Skill，为 Claude Code 注入表单字段、查询模式和工作流知识，大幅减少试错次数。
 
-> **GitHub Topics（建议在仓库 Settings 中设置）：** `claude-code` `skill` `erp` `kingdee` `k3cloud`
-
 > **使用其他 AI 客户端？** 本 Skill 是 Claude Code 专属的知识增强插件。如果你使用 Claude Desktop、Cursor、Cline、Cherry Studio、Openclaw 等其他支持 MCP 协议的客户端，直接配置 [kingdee-k3cloud-mcp](https://github.com/adamzhang1987/kingdee-k3cloud-mcp) 即可使用全部工具，无需安装本 Skill。
 
 ## 前提条件
