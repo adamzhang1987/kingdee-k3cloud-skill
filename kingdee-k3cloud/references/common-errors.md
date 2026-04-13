@@ -82,12 +82,35 @@ Tool result is too large. Maximum size is 1MB.
 field_keys: "FBillNo,FDate,FCustId.FName,FAmount"
 ```
 
-**方案2 — 分页查询：**
+**方案2 — 检查截断标志并翻页：**
+
+`query_bill_json` / `query_bill` 的返回结果现在带有分页元数据：
+```json
+{
+  "rows": [...],
+  "row_count": 2000,
+  "truncated": true,
+  "next_start_row": 2000,
+  "hint": "返回行数已达上限..."
+}
 ```
-# 第一页
-start_row: 0, top_count: 100
-# 第二页
-start_row: 100, top_count: 100
+
+翻页模板：
+```python
+start = 0
+all_rows = []
+while True:
+    result = query_bill_json(..., top_count=2000, start_row=start)
+    all_rows.extend(result["rows"])
+    if not result["truncated"]:
+        break
+    start = result["next_start_row"]
+```
+
+跨月分片（更推荐，避免单月也超限）：
+```python
+for month_filter in ["FDate >= '2025-01-01' AND FDate < '2025-02-01'", ...]:
+    # 对每个月执行上述翻页逻辑
 ```
 
 **方案3 — 分步查询：**
