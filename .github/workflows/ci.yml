@@ -26,7 +26,28 @@ jobs:
             [ -f "$f" ] && echo "✓ $f" || { echo "✗ missing: $f"; exit 1; }
           done
 
-      - name: Validate registry.json path field
+      - name: Validate registry.json schema
         run: |
-          path=$(python3 -c "import json; print(json.load(open('registry.json'))['path'])")
-          [ -d "$path" ] && echo "✓ registry.json path '$path' exists" || { echo "✗ registry.json path '$path' not found"; exit 1; }
+          python3 - <<'EOF'
+          import json, os, re, sys
+          d = json.load(open('registry.json'))
+          required = {'name', 'displayName', 'description', 'repo', 'path', 'version',
+                      'category', 'tags', 'author', 'license', 'language'}
+          missing = required - d.keys()
+          assert not missing, f'registry.json missing keys: {missing}'
+          assert os.path.isdir(d['path']), f"path '{d['path']}' does not exist"
+          assert re.match(r'^\d+\.\d+\.\d+$', d['version']), f"version '{d['version']}' not semver"
+          assert isinstance(d['tags'], list) and d['tags'], 'tags must be non-empty list'
+          print('registry.json schema OK')
+          EOF
+
+      - name: Markdown lint
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: '**/*.md'
+
+      - name: Link check
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --exclude-mail './**/*.md'
+          fail: true

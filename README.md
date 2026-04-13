@@ -48,8 +48,8 @@ Claude Code + MCP 工具（query_bill_json、view_bill 等）
 ```bash
 git clone https://github.com/adamzhang1987/kingdee-k3cloud-skill.git
 cd kingdee-k3cloud-skill
-# 打包
-zip -r kingdee-k3cloud.skill kingdee-k3cloud/
+# 打包（需要 make，或直接使用 zip 命令）
+make build
 # 将 kingdee-k3cloud.skill 复制到 skills 目录
 cp kingdee-k3cloud.skill ~/.claude/skills/
 ```
