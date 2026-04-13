@@ -26,22 +26,22 @@ Claude Code + MCP 工具（query_bill_json、view_bill 等）
 
 > MCP Server 本身兼容所有支持 MCP 协议的客户端（Claude Desktop、Cursor、Cline、Openclaw 等）。本 Skill 仅面向 Claude Code，为其提供额外的领域知识注入。
 
-- **Skill（本项目）** = Claude Code 专属智能增强层，让 Claude 自动掌握正确的 API 用法，避免字段名错误
-- **MCP Server** = 通用连接层，提供实际的 API 工具，适用于所有 MCP 客户端
+- **Skill（本项目）** = 知识库 + 工作流决策树（Claude Code 专属），让 Claude 自动掌握正确的 API 用法，避免字段名错误
+- **MCP Server** = 执行引擎，提供 15 个实际的 API 工具，适用于所有 MCP 客户端
 
 两者可分别使用，但在 Claude Code 中组合使用效果最佳。
 
 ## 安装方式
 
-### 方式一：从 Skill Hub 安装（推荐）
-
-在支持 Skill Hub 的客户端中搜索 `kingdee` 并一键安装。
-
-### 方式二：手动安装
+### 方式一：手动安装（推荐）
 
 1. 前往 [Releases 页面](https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest)，下载 `kingdee-k3cloud.skill`
 2. 将文件放入 Claude Code 的 skills 目录（通常为 `~/.claude/skills/`）
 3. 重启 Claude Code 使 skill 生效
+
+### 🚧 方式二：从 Skill Hub 安装（即将支持）
+
+待 Anthropic Skill Hub 正式上架后启用。届时可在支持 Skill Hub 的客户端中搜索 `kingdee` 并一键安装。
 
 ### 方式三：从源码安装
 
