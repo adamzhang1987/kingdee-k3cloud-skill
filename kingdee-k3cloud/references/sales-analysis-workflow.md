@@ -159,11 +159,33 @@ filter_string="FDate >= '2025-02-01' AND FDate < '2025-03-01' AND FDocumentStatu
 
 ## 七、数据量控制
 
-| 时间跨度 | 建议 top_count | 备注 |
-|----------|---------------|------|
-| 单日 | 200 | 通常够用 |
-| 单周 | 500 | |
-| 单月 | 2000 | 接近上限时考虑分段查询 |
-| 跨月 | 分月查询 | 避免超过 1MB 限制 |
+| 时间跨度 | 建议做法 | 备注 |
+|----------|---------|------|
+| 单日 | `query_bill_json`, top_count=200 | 通常够用 |
+| 单周 | `query_bill_json`, top_count=500 | |
+| 单月 | `query_bill_json`, top_count=2000 | 接近上限时翻页 |
+| 跨月/跨季度/跨年 | `query_bill_range`（mcp ≥ 1.2.0） | 自动分片 + 落盘，不受 1MB 限制 |
 
-> 超过 10 行结果建议创建 Excel 文件输出。
+### 推荐做法（mcp ≥ 1.2.0）
+```python
+# 全年销售数据，按月自动分片写入文件
+query_bill_range(
+    form_id="SAL_SaleOrder",
+    field_keys="FBillNo,FDate,FCustId.FName,FSalerId.FName,FAllAmount,FDocumentStatus",
+    date_field="FDate",
+    date_from="2025-01-01",
+    date_to="2026-01-01",
+    extra_filter="FDocumentStatus = 'C'",
+    chunk="month",
+    output_path="/tmp/sales_2025.ndjson"
+)
+```
+
+### 兜底做法（mcp < 1.2.0）
+```python
+for month in 月份范围:
+    query_bill_json(filter="FDate >= 'M-01' AND FDate < 'M+1-01' AND FDocumentStatus = 'C'", top_count=2000)
+    若 truncated=true → 继续 start_row=next_start_row
+```
+
+> 超过 10 行结果建议创建 Excel 文件输出；大批量数据直接用 `query_bill_range(output_path=...)` 落盘为 ndjson，再用 pandas 处理。

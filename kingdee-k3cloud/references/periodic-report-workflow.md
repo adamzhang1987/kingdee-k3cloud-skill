@@ -206,5 +206,5 @@ query_bill_json(
 1. **FAllAmount 去重**：客户/业务员维度统计时，必须先按 FBillNo 去重，详见 sales-analysis-workflow.md
 2. **排除内部采购单**：追加 `AND FCustId.FName not like '%内部客户关键词%'`（替换为实际的内部客户名称特征）
 3. **只统计已审核**：始终加 `FDocumentStatus = 'C'`
-4. **数据量控制**：月度数据建议 `top_count=2000`，超过时分段查询
+4. **数据量控制**：月度数据建议 `top_count=2000`，跨季度/跨年查询推荐 `query_bill_range(chunk="month", output_path=...)` 自动分片落盘（mcp ≥ 1.2.0），兜底：手动按月循环 `query_bill_json`
 5. **出库单日期**：SAL_OUTSTOCK 用 `FCreateDate` 而非 `FDate`
