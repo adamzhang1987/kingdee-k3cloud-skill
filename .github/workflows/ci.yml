@@ -42,7 +42,7 @@ jobs:
           EOF
 
       - name: Markdown lint
-        uses: DavidAnson/markdownlint-cli2-action@v19
+        uses: DavidAnson/markdownlint-cli2-action@v23
         with:
           globs: '**/*.md'
 
