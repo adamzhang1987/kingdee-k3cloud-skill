@@ -23,3 +23,11 @@ This is a Claude Code Skill — a collection of Markdown documents (`kingdee-k3c
 ## Reporting Issues
 
 Please open an issue with a clear description of the incorrect or missing information, including the K3Cloud version and form type if applicable.
+
+## Changelog
+
+If your PR adds a workflow, corrects field names, or makes a meaningful content change, please add a brief entry under the `[Unreleased]` section in `CHANGELOG.md`. Significant contributions will be credited by name in the release notes.
+
+## Code of Conduct
+
+This project follows the [Contributor Covenant v2.1](CODE_OF_CONDUCT.md). By participating, you agree to abide by its terms.

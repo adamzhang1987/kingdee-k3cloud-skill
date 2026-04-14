@@ -1,5 +1,7 @@
 # Kingdee K3Cloud ERP Skill
 
+[English](README.en.md) | [中文](README.md)
+
 [![CI](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 ![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)
@@ -90,6 +92,14 @@ kingdee-k3cloud/
 | Level 3 | references/ 详细文档 | 按需加载 |
 
 主文件保持精简（<300 行），详细的字段验证表、查询模板、错误处理等放在 `references/` 中按需引用。
+
+## 贡献者
+
+<a href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=adamzhang1987/kingdee-k3cloud-skill" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## License
 
