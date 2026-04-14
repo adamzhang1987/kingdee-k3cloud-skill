@@ -4,7 +4,7 @@
 
 Please **do not** report security vulnerabilities through public GitHub issues.
 
-Instead, email **adamzhang1987@gmail.com** with:
+Instead, email **<adamzhang1987@gmail.com>** with:
 - A description of the vulnerability
 - Steps to reproduce
 - Potential impact

@@ -96,7 +96,7 @@ The main file stays concise (<300 lines). Detailed field validation tables, quer
 ## Contributors
 
 <a href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=adamzhang1987/kingdee-k3cloud-skill" />
+  <img src="https://contrib.rocks/image?repo=adamzhang1987/kingdee-k3cloud-skill" alt="Contributors" />
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks).
