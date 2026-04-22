@@ -1,5 +1,5 @@
 ---
-name: kingdee
+name: kingdee-k3cloud
 description: "Use this skill whenever working with Kingdee K3Cloud ERP system (金蝶云星空). Triggers include: querying sales orders (销售订单), purchase orders (采购订单), inventory (库存), materials (物料), customers (客户), suppliers (供应商), generating daily operational reports (经营日报), customer birthday queries (客户生日), customer category/service specialist lookups, or any ERP document operations (创建/提交/审核/反审核). Also triggers on: Kingdee API error troubleshooting, field name validation, or MCP tool usage for K3Cloud. Keywords: 金蝶, 金蝶云星空, K3Cloud, ERP, 单据, 审核, 提交, 日报, 客户查询, 库存预警."
 ---
 
