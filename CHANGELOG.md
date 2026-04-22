@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-04-22
+
+### Added
+- `kingdee-k3cloud/LICENSE`: MIT-0 license file for ClawHub distribution bundle (ClawHub requires MIT-0 for all published skills)
+- Dual-licensing note in README.md and README.en.md (Apache-2.0 source / MIT-0 ClawHub bundle)
+
 ## [1.3.0] - 2026-04-13
 
 ### Changed
@@ -44,7 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `references/periodic-report-workflow.md`, `customization-guide.md`
 - GitHub Actions release workflow: packages `.skill` file on tag push
 
-[Unreleased]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.1.0...v1.1.1

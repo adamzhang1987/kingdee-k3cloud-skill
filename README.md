@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.3.1-blue.svg)
 ![Language](https://img.shields.io/badge/language-zh--CN-red.svg)
 
 金蝶云星空 ERP 系统的 Claude Code Skill，为 Claude Code 注入表单字段、查询模式和工作流知识，大幅减少试错次数。
@@ -104,3 +104,5 @@ Made with [contrib.rocks](https://contrib.rocks).
 ## License
 
 [Apache-2.0](LICENSE) © Adam Zhang
+
+> ClawHub 分发版本使用 MIT-0（符合 ClawHub 注册政策）；源码仓库维持 Apache-2.0。

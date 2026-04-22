@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.3.1-blue.svg)
 ![Language](https://img.shields.io/badge/language-zh--CN-red.svg)
 
 A Claude Code Skill for Kingdee K3Cloud ERP. Injects form field knowledge, query patterns, and workflow guidance into Claude Code, significantly reducing trial and error.
@@ -104,3 +104,5 @@ Made with [contrib.rocks](https://contrib.rocks).
 ## License
 
 [Apache-2.0](LICENSE) © Adam Zhang
+
+> The bundle published to ClawHub is distributed under MIT-0 (per ClawHub's registry policy); the source repository remains Apache-2.0.
