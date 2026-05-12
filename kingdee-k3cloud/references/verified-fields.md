@@ -217,6 +217,9 @@
 | `FKHLB` | 客户类别 | 返回 ID，需映射（见下方示例） |
 | `FFWZY` | 服务专员 | 返回 ID，需映射 |
 | `FSOCIALCRECODE` | 统一社会信用代码 | |
+| `FKHQY` | 客户区域 | 关联枚举，返回 ID，需映射；与 `FKHLB`/`FFWZY` 同级 |
+| `FGroup` | 客户分组 | 嵌套对象，取名称用 `FGroup.FName`（如「现金组」） |
+| `F_JKFSNEW` | 结款方式（当前有效） | 关联枚举，返回 ID，需映射；`F_JR_JKFS` 已废弃 |
 
 **发现自定义字段的方法：**
 ```
@@ -234,6 +237,9 @@ query_metadata(form_id="BD_Customer")
 | `FIsArchive` | 不存在 |
 | `FSaleOrgId` | 不存在 |
 | `FID` | 不存在（内码用 `view_bill` 的 id 参数查） |
+| `F_JR_KHLB` | 已废弃，客户类别改用 `FKHLB` |
+| `F_JR_JKFS` | 已废弃，结款方式改用 `F_JKFSNEW` |
+| `F_JR_FWZY` | 已废弃，服务专员改用 `FFWZY` |
 
 ### ID 映射（动态发现方法）
 
