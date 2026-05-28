@@ -200,6 +200,9 @@ audit_bill(form_id="SAL_SaleOrder", numbers="XSDD001,XSDD002,XSDD003")
 | `FCustomerID` / `FCustomerId` | 不存在，正确写法是 `FCustId` |
 | `SAL_OUTSTOCK` 中用 `FCustId.FName` | 该表中不存在此字段，会报 500 |
 | `STK_Inventory` 中用 `FNumber` | 不存在，物料编号是 `FMaterialId.FNumber` |
+| `STK_Inventory` 中用 `FAvailableQty` / `FAuxQty` | 不存在；可用量是 `FAVBQty`（主单位），开单可用量是自定义字段 `F_JR_FHTZDKYL1` |
+| `STK_Inventory` 中用 `FStockDate` / `FInboundDate` | 不存在；即时库存视图无入库日期，需关联 `STK_InStock` 按批号查 `FDate` |
+| `BD_MATERIAL` 的 `FSpecification` 含义 | 本部署中该字段实际存储"物料成分"，非通用"规格型号"；支数字段是自定义字段 `F_JR_ZS` |
 | `PUR_ReceiveBill` 查采购入库 | 返回空，应使用 `STK_InStock` |
 | 查询不加 `top_count` | 可能返回数据过大超过 1MB 限制 |
 | `query_bill_json` 返回正好 2000 行直接使用 | 必须检查 `truncated` 字段；`true` 时数据被截断，须继续翻页（`start_row=next_start_row`）或缩小时间范围 |
