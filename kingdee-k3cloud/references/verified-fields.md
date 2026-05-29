@@ -165,7 +165,7 @@
 | `FLot.FNumber` | 批号 | 关联批次档案（BD_BatchMainFile） |
 | `FQty` | 库存量（主单位） | ⚠️ 与 `FBaseQty` 不同，见下方说明 |
 | `FBaseQty` | 库存量（基本单位） | 与主单位不一定相同，取决于换算率 |
-| `FAVBQty` | 可用量（主单位） | 界面显示"可用量（主单位）" |
+| `FAVBQty` | 可用量（主单位） | ⚠️ metadata 标注为"可用量(主单位)"，实测返回 0，与界面显示值不符，原因待查。暂不建议依赖此字段，使用前需在 UI 确认列绑定关系。 |
 | `FBaseAVBQty` | 可用量（基本单位） | `IsViewVisible=false`，界面不显示 |
 | `FStockOrgId.FName` | 库存组织 | 关联字段 |
 | `FBaseUnitId.FName` | 基本单位 | 关联字段 |
@@ -174,8 +174,13 @@
 | `FExpiryDays` | 到期天数 | |
 | `FStockStatusId.FName` | 库存状态 | 关联字段 |
 | `FMtoNo` | 计划跟踪号 | |
-| `FAuxPropId` | 辅助属性 | 弹性字段，含色号（`FAUXPROPID__FF100001`）、缸号（`FAUXPROPID__FF100002`）等子字段 |
-| `FStockLocId` | 仓位 | 弹性字段，按仓库方案不同展开不同子字段，见下方说明 |
+| `FAuxPropId.FF100001.FName` | 色号名称（辅助属性） | 弹性子字段，返回色号名称如 `8525,桃粉` |
+| `FAuxPropId.FF100001.FNumber` | 色号编码（辅助属性） | 弹性子字段，返回色号编码如 `SH002143` |
+| `FAuxPropId.FF100001` | 色号 ID（辅助属性） | 弹性子字段，返回内部数值 ID，一般用 `.FName` 替代 |
+| `FAuxPropId.FF100002` | 缸号（辅助属性） | 弹性子字段，文本类型，直接返回缸号字符串如 `QH260414` |
+| `FStockLocId.FF100004.FName` | 少云纱线仓位名称 | 弹性子字段，返回仓位名称如 `A-2-14` |
+| `FStockLocId.FF100004.FNumber` | 少云纱线仓位编码 | 弹性子字段，返回编码如 `A-2-14` |
+| `FStockLocId.FF100002` | 色卡仓位 | 弹性子字段，无色卡仓位时返回 `0` |
 | `F_JR_FHTZDKYL1` | 开单可用量 | 自定义字段（`IsViewVisible=true`），界面可见版本 |
 | `F_JR_FHTZQTY1` | 开单未发货数量 | 自定义字段（`IsViewVisible=true`），界面可见版本 |
 
@@ -186,14 +191,27 @@
 - 实际查询"库存量（主单位）"时应使用 `FQty`；查"库存量（基本单位）"用 `FBaseQty`
 - 两者数值相同的前提是主单位与基本单位换算率为 1:1
 
-### ⚠️ 仓位字段（FStockLocId）说明
+### ⚠️ 弹性字段（ElementType=60523）查询格式说明
 
-`FStockLocId` 是弹性字段，子字段按仓库的仓位方案动态配置：
+弹性字段（仓位 `FStockLocId`、辅助属性 `FAuxPropId`）的查询格式规则：
 
-| 子字段 Key | 含义 | 备注 |
-|-----------|------|------|
-| `FSTOCKLOCID__FF100002` | 色卡仓位 | 色卡类仓库适用 |
-| `FSTOCKLOCID__FF100004` | 少云纱线仓位 | 纱线仓库适用，如值 `A-2-30` |
+```
+父Key.子FieldName              → 返回 ID（数值或文本）
+父Key.子FieldName.FName        → 返回关联档案名称（推荐用于色号等关联字段）
+父Key.子FieldName.FNumber      → 返回关联档案编码
+```
+
+**字段对照：**
+
+| 查询字段名 | 中文含义 | 返回示例 |
+|-----------|---------|---------|
+| `FAuxPropId.FF100001.FName` | 色号名称 | `8525,桃粉` |
+| `FAuxPropId.FF100001.FNumber` | 色号编码 | `SH002143` |
+| `FAuxPropId.FF100002` | 缸号 | `QH260414` |
+| `FStockLocId.FF100004.FName` | 少云纱线仓位名称 | `A-2-14` |
+| `FStockLocId.FF100002.FName` | 色卡仓位名称 | — |
+
+**重要：** `query_metadata` 返回的子字段 `Key`（如 `FAUXPROPID__FF100001`）是元数据标识符，**不能直接用于查询**，查询时必须使用 `父Key.子FieldName` 格式。
 
 ### ⚠️ 自定义字段说明
 
@@ -218,6 +236,14 @@
 | `FForbidStatus` | 不存在于库存视图（存在于 `BD_MATERIAL`） |
 | `F_JR_FHTZDKYL` | 已隐藏（`IsViewVisible=false`），使用 `F_JR_FHTZDKYL1` |
 | `F_JR_FHTZQTY` | 已隐藏（`IsViewVisible=false`），使用 `F_JR_FHTZQTY1` |
+| `FAuxPropId` | 弹性父键，不可直接查询，触发 500；改用 `FAuxPropId.FF100001.FName`（色号名称）、`FAuxPropId.FF100002`（缸号） |
+| `FStockLocId` | 弹性父键，不可直接查询，触发 500；改用 `FStockLocId.FF100004.FName`（少云纱线仓位）等子字段格式 |
+| `FAUXPROPID__FF100001` | metadata Key 格式，不可用于查询，触发 500；改用 `FAuxPropId.FF100001.FName` |
+| `FAUXPROPID__FF100002` | metadata Key 格式，不可用于查询，触发 500；改用 `FAuxPropId.FF100002` |
+| `FSTOCKLOCID__FF100002` | metadata Key 格式，不可用于查询，触发 500；改用 `FStockLocId.FF100002.FName` |
+| `FSTOCKLOCID__FF100004` | metadata Key 格式，不可用于查询，触发 500；改用 `FStockLocId.FF100004.FName` |
+| `FAuxPropId__FF100001` / `FAuxPropId__FF100002` / `FStockLocId__FF100004` | 双下划线拼接格式，触发 500 |
+| `FF100001` / `FF100002` / `FF100004` | 裸 FieldName 不可查询，触发 500；必须带父 Key 前缀 |
 
 ### ⚠️ 安全库存说明
 

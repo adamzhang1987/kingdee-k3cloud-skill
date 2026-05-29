@@ -203,6 +203,8 @@ audit_bill(form_id="SAL_SaleOrder", numbers="XSDD001,XSDD002,XSDD003")
 | `STK_Inventory` 中用 `FAvailableQty` / `FAuxQty` | 不存在；可用量是 `FAVBQty`（主单位），开单可用量是自定义字段 `F_JR_FHTZDKYL1` |
 | `STK_Inventory` 中用 `FStockDate` / `FInboundDate` | 不存在；即时库存视图无入库日期，需关联 `STK_InStock` 按批号查 `FDate` |
 | `BD_MATERIAL` 的 `FSpecification` 含义 | 本部署中该字段实际存储"物料成分"，非通用"规格型号"；支数字段是自定义字段 `F_JR_ZS` |
+| 弹性字段用 `FAUXPROPID__FF100001` 等格式 | metadata Key 格式，不可用于查询，触发 500；正确格式为 `父Key.子FieldName`，如 `FAuxPropId.FF100001.FName`（色号名称）、`FAuxPropId.FF100002`（缸号）、`FStockLocId.FF100004.FName`（仓位名称） |
+| 弹性字段直接用父键查询 | `FAuxPropId` 和 `FStockLocId` 均为弹性父键（ElementType=60523），直接查询触发 500，必须展开到子字段 |
 | `PUR_ReceiveBill` 查采购入库 | 返回空，应使用 `STK_InStock` |
 | 查询不加 `top_count` | 可能返回数据过大超过 1MB 限制 |
 | `query_bill_json` 返回正好 2000 行直接使用 | 必须检查 `truncated` 字段；`true` 时数据被截断，须继续翻页（`start_row=next_start_row`）或缩小时间范围 |
