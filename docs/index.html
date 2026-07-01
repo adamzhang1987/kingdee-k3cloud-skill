@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kingdee K3Cloud Skill — 为 Claude Code 注入金蝶 ERP 知识</title>
-<meta name="description" content="金蝶云星空 ERP 系统的 Claude Code Skill，注入表单字段、查询模式和工作流知识，大幅减少试错次数。">
+<title>Kingdee K3Cloud Skill — 为 AI Agent 注入金蝶 ERP 知识</title>
+<meta name="description" content="面向支持 Skill 机制的 AI Agent（Claude Code、openclaw、hermes 等）的金蝶云星空 ERP Skill，注入表单字段、查询模式和工作流知识，大幅减少试错次数。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧩</text></svg>">
 <style>
   :root{
@@ -220,13 +220,13 @@
 
 <header class="hero" id="top">
   <div class="wrap">
-    <div class="kicker">🧩 <span class="lang-zh">Claude Code Skill</span><span class="lang-en">Claude Code Skill</span></div>
+    <div class="kicker">🧩 <span class="lang-zh">Agent Skill</span><span class="lang-en">Agent Skill</span></div>
     <h1>
-      <span class="lang-zh">为 Claude Code 注入金蝶 ERP 知识</span>
-      <span class="lang-en">Inject Kingdee ERP Knowledge into Claude Code</span>
+      <span class="lang-zh">为 AI Agent 注入金蝶 ERP 知识</span>
+      <span class="lang-en">Inject Kingdee ERP Knowledge into Your AI Agent</span>
     </h1>
-    <p class="subtitle lang-zh">为 Claude Code 注入金蝶云星空的表单字段、查询模式和工作流知识，大幅减少试错次数。配合 <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener" style="color:var(--accent-1)">kingdee-k3cloud-mcp</a> 使用效果最佳。</p>
-    <p class="subtitle lang-en">Gives Claude Code the form fields, query patterns, and workflow knowledge it needs to use Kingdee K3Cloud correctly — pairs best with <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener" style="color:var(--accent-1)">kingdee-k3cloud-mcp</a>.</p>
+    <p class="subtitle lang-zh">为支持 Skill 机制的 AI Agent（Claude Code、openclaw、hermes 等）注入金蝶云星空的表单字段、查询模式和工作流知识，大幅减少试错次数。配合 <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener" style="color:var(--accent-1)">kingdee-k3cloud-mcp</a> 使用效果最佳。</p>
+    <p class="subtitle lang-en">Gives any Skill-capable AI agent (Claude Code, openclaw, hermes, etc.) the form fields, query patterns, and workflow knowledge it needs to use Kingdee K3Cloud correctly — pairs best with <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener" style="color:var(--accent-1)">kingdee-k3cloud-mcp</a>.</p>
 
     <div class="cta-row">
       <a class="btn btn-primary" href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest" target="_blank" rel="noopener">
@@ -255,19 +255,19 @@
     <p class="eyebrow lang-en">Architecture</p>
     <h2 class="lang-zh">Skill 与 MCP 的分工</h2>
     <h2 class="lang-en">Skill vs. MCP: division of labor</h2>
-    <p class="lede lang-zh"><strong>Skill（本项目）</strong> = 知识库 + 工作流决策树，让 Claude 自动掌握正确的 API 用法，避免字段名错误。<strong>MCP Server</strong> = 执行引擎，提供 15 个实际的 API 工具，适用于所有 MCP 客户端。两者可分别使用，但在 Claude Code 中组合使用效果最佳。</p>
-    <p class="lede lang-en"><strong>Skill (this project)</strong> = knowledge base + workflow decision trees, so Claude picks the right API usage automatically. <strong>MCP Server</strong> = the execution engine with 15 real API tools, usable from any MCP client. Best combined inside Claude Code.</p>
+    <p class="lede lang-zh"><strong>Skill（本项目）</strong> = 知识库 + 工作流决策树，让 Agent 自动掌握正确的 API 用法，避免字段名错误。<strong>MCP Server</strong> = 执行引擎，提供 15 个实际的 API 工具，适用于所有 MCP 客户端。两者可分别使用，但在支持 Skill 机制的 Agent（Claude Code、openclaw、hermes 等）中组合使用效果最佳。</p>
+    <p class="lede lang-en"><strong>Skill (this project)</strong> = knowledge base + workflow decision trees, so the agent picks the right API usage automatically. <strong>MCP Server</strong> = the execution engine with 15 real API tools, usable from any MCP client. Best combined inside a Skill-capable agent (Claude Code, openclaw, hermes, etc.).</p>
 
-    <div class="arch">Claude Code (Skill installed)
+    <div class="arch">AI Agent (Skill installed)
         │  Knowledge injection (form IDs, field names, workflows)
         ▼
-Claude Code + MCP tools (query_bill_json, view_bill, ...)
+Agent + MCP tools (query_bill_json, view_bill, ...)
         │  Kingdee Web API
         ▼
 金蝶云星空 K3Cloud</div>
 
-    <div class="note lang-zh"><strong>使用其他 AI 客户端？</strong> 本 Skill 是 Claude Code 专属的知识增强插件。如果你使用 Claude Desktop、Cursor、Cline、Cherry Studio、Openclaw 等其他支持 MCP 协议的客户端，直接配置 <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener">kingdee-k3cloud-mcp</a> 即可使用全部工具，无需安装本 Skill。</div>
-    <div class="note lang-en"><strong>Using a different AI client?</strong> This Skill is exclusive to Claude Code. If you use Claude Desktop, Cursor, Cline, Cherry Studio, Openclaw, or any other MCP-compatible client, just configure <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener">kingdee-k3cloud-mcp</a> directly — no Skill install needed.</div>
+    <div class="note lang-zh"><strong>使用纯 MCP 客户端？</strong> 如果你使用 Claude Desktop、Cursor、Cline、Cherry Studio 等不支持 Skill 机制的 MCP 客户端，直接配置 <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener">kingdee-k3cloud-mcp</a> 即可使用全部工具，无需安装本 Skill；本 Skill 面向支持 Skill 机制的 AI Agent（Claude Code、openclaw、hermes 等），提供额外的领域知识增强。</div>
+    <div class="note lang-en"><strong>Using a plain MCP client?</strong> If you use Claude Desktop, Cursor, Cline, Cherry Studio, or another MCP client without Skill support, just configure <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener">kingdee-k3cloud-mcp</a> directly — no Skill install needed. This Skill is for any Skill-capable AI agent (Claude Code, openclaw, hermes, etc.) that wants extra domain knowledge on top.</div>
   </div>
 </section>
 
@@ -283,8 +283,8 @@ Claude Code + MCP tools (query_bill_json, view_bill, ...)
         <div class="num"></div>
         <div>
           <h4 class="lang-zh">手动安装（推荐）</h4><h4 class="lang-en">Manual install (recommended)</h4>
-          <p class="lang-zh">前往 <a href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest" target="_blank" rel="noopener" style="color:var(--accent-3)">Releases 页面</a>下载 <code>kingdee-k3cloud.skill</code>，放入 <code>~/.claude/skills/</code>，重启 Claude Code。</p>
-          <p class="lang-en">Download <code>kingdee-k3cloud.skill</code> from the <a href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest" target="_blank" rel="noopener" style="color:var(--accent-3)">latest release</a>, drop it in <code>~/.claude/skills/</code>, restart Claude Code.</p>
+          <p class="lang-zh">前往 <a href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest" target="_blank" rel="noopener" style="color:var(--accent-3)">Releases 页面</a>下载 <code>kingdee-k3cloud.skill</code>，放入你的 Agent 的 skills 目录（Claude Code 为 <code>~/.claude/skills/</code>），重启生效。</p>
+          <p class="lang-en">Download <code>kingdee-k3cloud.skill</code> from the <a href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest" target="_blank" rel="noopener" style="color:var(--accent-3)">latest release</a>, drop it in your agent's skills directory (Claude Code uses <code>~/.claude/skills/</code>), then restart.</p>
         </div>
       </div>
       <div class="step">
