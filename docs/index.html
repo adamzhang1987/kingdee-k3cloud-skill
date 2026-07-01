@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kingdee K3Cloud Skill — 为 Claude Code 注入金蝶 ERP 知识</title>
+<meta name="description" content="金蝶云星空 ERP 系统的 Claude Code Skill，注入表单字段、查询模式和工作流知识，大幅减少试错次数。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧩</text></svg>">
+<style>
+  :root{
+    --bg-0:#070a14;
+    --bg-1:#0c1120;
+    --bg-2:#111a2e;
+    --accent-1:#5eead4;
+    --accent-2:#818cf8;
+    --accent-3:#c084fc;
+    --text-0:#e8ecfb;
+    --text-1:#a8b2d1;
+    --text-2:#6b7591;
+    --border:rgba(148,163,255,.14);
+    --card-bg:rgba(255,255,255,.03);
+    --radius:16px;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Roboto, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--sans);
+    color:var(--text-0);
+    background:
+      radial-gradient(circle at 15% -10%, rgba(192,132,252,.22), transparent 45%),
+      radial-gradient(circle at 85% 0%, rgba(94,234,212,.15), transparent 40%),
+      radial-gradient(circle at 50% 100%, rgba(129,140,248,.14), transparent 50%),
+      linear-gradient(180deg, var(--bg-0), var(--bg-1) 40%, var(--bg-2));
+    background-attachment:fixed;
+    line-height:1.6;
+  }
+  a{color:inherit;}
+  .lang-en{display:none;}
+  body.lang-en .lang-zh{display:none;}
+  body.lang-en .lang-en{display:initial;}
+  body.lang-en .lang-en.inline{display:inline;}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(16px);
+    background:rgba(7,10,20,.65);
+    border-bottom:1px solid var(--border);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px;text-decoration:none;}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--accent-3),var(--accent-2));box-shadow:0 0 12px var(--accent-3);}
+  .navlinks{display:flex;gap:22px;font-size:14px;color:var(--text-1);}
+  .navlinks a{text-decoration:none;transition:color .15s;}
+  .navlinks a:hover{color:var(--accent-3);}
+  .navlinks{display:none;}
+  @media(min-width:760px){.navlinks{display:flex;}}
+  .navright{display:flex;align-items:center;gap:12px;}
+  .lang-btn{
+    font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:999px;
+    border:1px solid var(--border);background:var(--card-bg);color:var(--text-1);cursor:pointer;
+    transition:all .15s;
+  }
+  .lang-btn:hover{border-color:var(--accent-3);color:var(--text-0);}
+
+  header.hero{padding:96px 0 64px;text-align:center;}
+  .kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:12px;color:var(--accent-3);
+    border:1px solid rgba(192,132,252,.3);background:rgba(192,132,252,.06);
+    padding:6px 14px;border-radius:999px;margin-bottom:28px;
+  }
+  h1{
+    font-size:clamp(2.2rem,5.5vw,3.6rem);
+    line-height:1.1;margin:0 0 20px;font-weight:800;letter-spacing:-.02em;
+    background:linear-gradient(115deg,#fff 10%,var(--accent-3) 55%,var(--accent-1) 90%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .subtitle{font-size:clamp(1rem,2vw,1.25rem);color:var(--text-1);max-width:680px;margin:0 auto 36px;}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:44px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:13px 26px;border-radius:12px;font-weight:600;font-size:14.5px;
+    text-decoration:none;transition:transform .15s, box-shadow .15s;
+  }
+  .btn-primary{
+    color:#0a0e1a;
+    background:linear-gradient(120deg,var(--accent-3),var(--accent-2));
+    box-shadow:0 0 0 1px rgba(255,255,255,.08) inset, 0 8px 30px -8px rgba(192,132,252,.6);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset, 0 12px 36px -6px rgba(192,132,252,.8);}
+  .btn-ghost{
+    color:var(--text-0);background:var(--card-bg);border:1px solid var(--border);
+  }
+  .btn-ghost:hover{border-color:var(--accent-3);transform:translateY(-2px);}
+
+  .badges{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .badges img{height:20px;border-radius:4px;}
+
+  section{padding:64px 0;}
+  section.alt{background:linear-gradient(180deg,transparent, rgba(255,255,255,.015) 15%, rgba(255,255,255,.015) 85%, transparent);}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-3);margin:0 0 10px;}
+  h2{font-size:clamp(1.5rem,3vw,2.1rem);margin:0 0 12px;font-weight:750;letter-spacing:-.01em;}
+  .lede{color:var(--text-1);max-width:640px;margin-bottom:40px;}
+
+  .grid{display:grid;gap:16px;}
+  .grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+  .grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+
+  .card{
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+    backdrop-filter:blur(10px);
+    transition:transform .2s, border-color .2s, box-shadow .2s;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(400px circle at var(--x,50%) var(--y,0%), rgba(192,132,252,.14), transparent 60%);
+    opacity:0;transition:opacity .3s;pointer-events:none;
+  }
+  .card:hover::before{opacity:1;}
+  .card:hover{transform:translateY(-4px);border-color:rgba(148,163,255,.32);box-shadow:0 16px 40px -20px rgba(192,132,252,.25);}
+  .card h3{margin:0 0 8px;font-size:16px;}
+  .card p{margin:0;color:var(--text-1);font-size:14px;}
+  .card .icon{font-size:22px;margin-bottom:12px;display:block;}
+
+  pre{
+    background:rgba(6,9,18,.85);border:1px solid var(--border);border-radius:12px;
+    padding:18px 20px;overflow-x:auto;font-family:var(--mono);font-size:13px;color:#d5dcff;
+    line-height:1.55;
+  }
+  pre .c{color:var(--accent-1);}
+  pre .s{color:#fbbf7a;}
+
+  .steps{counter-reset:step;}
+  .step{display:flex;gap:16px;margin-bottom:22px;}
+  .step .num{
+    counter-increment:step;flex:none;width:34px;height:34px;border-radius:10px;
+    background:linear-gradient(135deg,var(--accent-3),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#0a0e1a;
+  }
+  .step .num::before{content:counter(step);}
+  .step h4{margin:2px 0 6px;font-size:15px;}
+  .step p{margin:0;color:var(--text-1);font-size:14px;}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  thead th{
+    text-align:left;color:var(--text-2);font-weight:600;font-size:12px;
+    text-transform:uppercase;letter-spacing:.06em;padding:10px 14px;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:12px 14px;border-bottom:1px solid rgba(148,163,255,.08);color:var(--text-1);}
+  tbody tr:hover{background:rgba(255,255,255,.02);}
+  tbody td:first-child{font-family:var(--mono);color:var(--accent-3);white-space:nowrap;}
+  .table-wrap{
+    background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;margin-bottom:20px;
+  }
+  .table-wrap h4{margin:0;padding:16px 18px 0;font-size:14px;color:var(--text-0);}
+  .table-wrap table{margin-top:8px;}
+
+  .arch{
+    font-family:var(--mono);font-size:13px;color:var(--text-1);
+    background:rgba(6,9,18,.85);border:1px solid var(--border);border-radius:12px;
+    padding:22px;text-align:center;white-space:pre;overflow-x:auto;
+    line-height:1.7;
+  }
+
+  .filetree{
+    font-family:var(--mono);font-size:13px;color:var(--text-1);
+    background:rgba(6,9,18,.85);border:1px solid var(--border);border-radius:12px;
+    padding:22px;white-space:pre;overflow-x:auto;line-height:1.7;
+  }
+  .filetree .f{color:var(--accent-3);}
+  .filetree .d{color:var(--text-2);}
+
+  footer{border-top:1px solid var(--border);padding:48px 0 40px;color:var(--text-2);font-size:13.5px;}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;}
+  footer a{text-decoration:none;color:var(--text-1);}
+  footer a:hover{color:var(--accent-3);}
+  .footlinks{display:flex;flex-wrap:wrap;gap:18px;}
+
+  .note{
+    background:rgba(192,132,252,.06);border:1px solid rgba(192,132,252,.25);
+    border-radius:12px;padding:16px 20px;font-size:14px;color:var(--text-1);margin-top:24px;
+  }
+  .note strong{color:var(--text-0);}
+
+  ::selection{background:rgba(192,132,252,.4);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <span class="dot"></span>
+      Kingdee K3Cloud <span class="lang-zh">Skill</span><span class="lang-en">Skill</span>
+    </a>
+    <div class="navlinks">
+      <a href="#install"><span class="lang-zh">安装</span><span class="lang-en">Install</span></a>
+      <a href="#scope"><span class="lang-zh">覆盖场景</span><span class="lang-en">Coverage</span></a>
+      <a href="#design"><span class="lang-zh">设计理念</span><span class="lang-en">Design</span></a>
+      <a href="#structure"><span class="lang-zh">目录结构</span><span class="lang-en">Structure</span></a>
+    </div>
+    <div class="navright">
+      <button class="lang-btn" id="langToggle">EN / 中</button>
+      <a class="btn btn-ghost" style="padding:8px 16px;font-size:13px" href="https://github.com/adamzhang1987/kingdee-k3cloud-skill" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="kicker">🧩 <span class="lang-zh">Claude Code Skill</span><span class="lang-en">Claude Code Skill</span></div>
+    <h1>
+      <span class="lang-zh">为 Claude Code 注入金蝶 ERP 知识</span>
+      <span class="lang-en">Inject Kingdee ERP Knowledge into Claude Code</span>
+    </h1>
+    <p class="subtitle lang-zh">为 Claude Code 注入金蝶云星空的表单字段、查询模式和工作流知识，大幅减少试错次数。配合 <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener" style="color:var(--accent-1)">kingdee-k3cloud-mcp</a> 使用效果最佳。</p>
+    <p class="subtitle lang-en">Gives Claude Code the form fields, query patterns, and workflow knowledge it needs to use Kingdee K3Cloud correctly — pairs best with <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener" style="color:var(--accent-1)">kingdee-k3cloud-mcp</a>.</p>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest" target="_blank" rel="noopener">
+        ⬇️ <span class="lang-zh">下载 .skill 文件</span><span class="lang-en">Download .skill</span>
+      </a>
+      <a class="btn btn-ghost" href="#install">
+        🚀 <span class="lang-zh">安装说明</span><span class="lang-en">Install Guide</span>
+      </a>
+      <a class="btn btn-ghost" href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener">
+        ⚙️ <span class="lang-zh">配套 MCP Server</span><span class="lang-en">Companion MCP Server</span>
+      </a>
+    </div>
+
+    <div class="badges">
+      <img alt="CI" src="https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml/badge.svg">
+      <img alt="License" src="https://img.shields.io/badge/License-Apache_2.0-blue.svg">
+      <img alt="Version" src="https://img.shields.io/badge/version-1.3.1-blue.svg">
+      <img alt="Language" src="https://img.shields.io/badge/language-zh--CN-red.svg">
+    </div>
+  </div>
+</header>
+
+<section id="architecture">
+  <div class="wrap">
+    <p class="eyebrow lang-zh">整体架构</p>
+    <p class="eyebrow lang-en">Architecture</p>
+    <h2 class="lang-zh">Skill 与 MCP 的分工</h2>
+    <h2 class="lang-en">Skill vs. MCP: division of labor</h2>
+    <p class="lede lang-zh"><strong>Skill（本项目）</strong> = 知识库 + 工作流决策树，让 Claude 自动掌握正确的 API 用法，避免字段名错误。<strong>MCP Server</strong> = 执行引擎，提供 15 个实际的 API 工具，适用于所有 MCP 客户端。两者可分别使用，但在 Claude Code 中组合使用效果最佳。</p>
+    <p class="lede lang-en"><strong>Skill (this project)</strong> = knowledge base + workflow decision trees, so Claude picks the right API usage automatically. <strong>MCP Server</strong> = the execution engine with 15 real API tools, usable from any MCP client. Best combined inside Claude Code.</p>
+
+    <div class="arch">Claude Code (Skill installed)
+        │  Knowledge injection (form IDs, field names, workflows)
+        ▼
+Claude Code + MCP tools (query_bill_json, view_bill, ...)
+        │  Kingdee Web API
+        ▼
+金蝶云星空 K3Cloud</div>
+
+    <div class="note lang-zh"><strong>使用其他 AI 客户端？</strong> 本 Skill 是 Claude Code 专属的知识增强插件。如果你使用 Claude Desktop、Cursor、Cline、Cherry Studio、Openclaw 等其他支持 MCP 协议的客户端，直接配置 <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener">kingdee-k3cloud-mcp</a> 即可使用全部工具，无需安装本 Skill。</div>
+    <div class="note lang-en"><strong>Using a different AI client?</strong> This Skill is exclusive to Claude Code. If you use Claude Desktop, Cursor, Cline, Cherry Studio, Openclaw, or any other MCP-compatible client, just configure <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener">kingdee-k3cloud-mcp</a> directly — no Skill install needed.</div>
+  </div>
+</section>
+
+<section class="alt" id="install">
+  <div class="wrap">
+    <p class="eyebrow lang-zh">安装方式</p>
+    <p class="eyebrow lang-en">Installation</p>
+    <h2 class="lang-zh">三种安装方式</h2>
+    <h2 class="lang-en">Three ways to install</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="num"></div>
+        <div>
+          <h4 class="lang-zh">手动安装（推荐）</h4><h4 class="lang-en">Manual install (recommended)</h4>
+          <p class="lang-zh">前往 <a href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest" target="_blank" rel="noopener" style="color:var(--accent-3)">Releases 页面</a>下载 <code>kingdee-k3cloud.skill</code>，放入 <code>~/.claude/skills/</code>，重启 Claude Code。</p>
+          <p class="lang-en">Download <code>kingdee-k3cloud.skill</code> from the <a href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest" target="_blank" rel="noopener" style="color:var(--accent-3)">latest release</a>, drop it in <code>~/.claude/skills/</code>, restart Claude Code.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num"></div>
+        <div>
+          <h4 class="lang-zh">Skill Hub（即将支持）</h4><h4 class="lang-en">Skill Hub (coming soon)</h4>
+          <p class="lang-zh">待 Anthropic Skill Hub 正式上架后，可在支持的客户端中搜索 <code>kingdee</code> 一键安装。</p>
+          <p class="lang-en">Once Anthropic's Skill Hub launches, search <code>kingdee</code> in a supporting client for one-click install.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num"></div>
+        <div>
+          <h4 class="lang-zh">从源码安装</h4><h4 class="lang-en">Build from source</h4>
+          <p class="lang-zh">克隆仓库后运行 <code>make build</code> 打包，将生成的 <code>.skill</code> 文件复制到 skills 目录。</p>
+          <p class="lang-en">Clone the repo, run <code>make build</code> to package, then copy the resulting <code>.skill</code> file into your skills directory.</p>
+        </div>
+      </div>
+    </div>
+
+    <pre><span class="c"># <span class="lang-zh inline">从源码安装</span><span class="lang-en inline">Build from source</span></span>
+git clone https://github.com/adamzhang1987/kingdee-k3cloud-skill.git
+cd kingdee-k3cloud-skill
+make build
+cp kingdee-k3cloud.skill ~/.claude/skills/</pre>
+  </div>
+</section>
+
+<section id="scope">
+  <div class="wrap">
+    <p class="eyebrow lang-zh">覆盖场景</p>
+    <p class="eyebrow lang-en">Coverage</p>
+    <h2 class="lang-zh">这个 Skill 能帮你做什么</h2>
+    <h2 class="lang-en">What this Skill covers</h2>
+
+    <div class="grid grid-3">
+      <div class="card"><span class="icon">🔍</span>
+        <h3 class="lang-zh">ERP 数据查询</h3><h3 class="lang-en">ERP Data Queries</h3>
+        <p class="lang-zh">销售订单、采购订单、库存、物料、客户、供应商。</p>
+        <p class="lang-en">Sales orders, purchase orders, inventory, materials, customers, suppliers.</p>
+      </div>
+      <div class="card"><span class="icon">📊</span>
+        <h3 class="lang-zh">经营日报生成</h3><h3 class="lang-en">Daily Report Generation</h3>
+        <p class="lang-zh">标准 5 步查询流程，最优 token 路径。</p>
+        <p class="lang-en">A standardized 5-step query flow optimized for token usage.</p>
+      </div>
+      <div class="card"><span class="icon">👤</span>
+        <h3 class="lang-zh">客户信息管理</h3><h3 class="lang-en">Customer Management</h3>
+        <p class="lang-zh">客户查询、生日筛选、类别/专员映射。</p>
+        <p class="lang-en">Customer lookups, birthday filters, category/rep mappings.</p>
+      </div>
+      <div class="card"><span class="icon">📝</span>
+        <h3 class="lang-zh">单据操作</h3><h3 class="lang-en">Bill Operations</h3>
+        <p class="lang-zh">创建、提交、审核、反审核、下推。</p>
+        <p class="lang-en">Create, submit, audit, unaudit, push.</p>
+      </div>
+      <div class="card"><span class="icon">🛠️</span>
+        <h3 class="lang-zh">错误排查</h3><h3 class="lang-en">Error Troubleshooting</h3>
+        <p class="lang-zh">字段名验证、500 错误处理、数据量控制。</p>
+        <p class="lang-en">Field-name verification, 500-error handling, result-size control.</p>
+      </div>
+      <div class="card"><span class="icon">📈</span>
+        <h3 class="lang-zh">分析工作流</h3><h3 class="lang-en">Analysis Workflows</h3>
+        <p class="lang-zh">销售分析、库存分析、订单追踪、周期性报表。</p>
+        <p class="lang-en">Sales analysis, inventory analysis, order tracking, periodic reports.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="design">
+  <div class="wrap">
+    <p class="eyebrow lang-zh">设计理念</p>
+    <p class="eyebrow lang-en">Design Philosophy</p>
+    <h2 class="lang-zh">Progressive Disclosure（渐进式披露）</h2>
+    <h2 class="lang-en">Progressive Disclosure</h2>
+    <p class="lede lang-zh">主文件保持精简（&lt;300 行），详细的字段验证表、查询模板、错误处理等放在 <code>references/</code> 中按需引用。</p>
+    <p class="lede lang-en">The main file stays lean (&lt;300 lines); detailed field tables, query templates, and error handling live in <code>references/</code> and load on demand.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="lang-zh">层级</th><th class="lang-en">Level</th>
+            <th class="lang-zh">内容</th><th class="lang-en">Content</th>
+            <th class="lang-zh">加载时机</th><th class="lang-en">Loaded When</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Level 1</td>
+            <td class="lang-zh">Skill name + description</td><td class="lang-en">Skill name + description</td>
+            <td class="lang-zh">始终在上下文中</td><td class="lang-en">Always in context</td>
+          </tr>
+          <tr>
+            <td>Level 2</td>
+            <td class="lang-zh">SKILL.md（140 行）</td><td class="lang-en">SKILL.md (140 lines)</td>
+            <td class="lang-zh">Skill 触发时加载</td><td class="lang-en">Loaded when the skill triggers</td>
+          </tr>
+          <tr>
+            <td>Level 3</td>
+            <td class="lang-zh">references/ 详细文档</td><td class="lang-en">references/ detail docs</td>
+            <td class="lang-zh">按需加载</td><td class="lang-en">Loaded on demand</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="structure">
+  <div class="wrap">
+    <p class="eyebrow lang-zh">目录结构</p>
+    <p class="eyebrow lang-en">Directory Structure</p>
+    <h2 class="lang-zh">Skill 内容一览</h2>
+    <h2 class="lang-en">What's inside</h2>
+
+    <div class="filetree">kingdee-k3cloud/
+├── <span class="f">SKILL.md</span>                          <span class="d"><span class="lang-zh inline">主文件：核心原则、表单速查、字段规则</span><span class="lang-en inline">main file: core principles, form lookup, field rules</span></span>
+└── references/
+    ├── <span class="f">verified-fields.md</span>            <span class="d"><span class="lang-zh inline">已验证字段大全</span><span class="lang-en inline">verified field catalog</span></span>
+    ├── <span class="f">daily-report-workflow.md</span>      <span class="d"><span class="lang-zh inline">经营日报标准查询流程</span><span class="lang-en inline">daily report workflow</span></span>
+    ├── <span class="f">customer-query-guide.md</span>       <span class="d"><span class="lang-zh inline">客户查询专题</span><span class="lang-en inline">customer query guide</span></span>
+    ├── <span class="f">common-errors.md</span>               <span class="d"><span class="lang-zh inline">常见错误及解决方案</span><span class="lang-en inline">common errors & fixes</span></span>
+    ├── <span class="f">sales-analysis-workflow.md</span>    <span class="d"><span class="lang-zh inline">销售分析工作流</span><span class="lang-en inline">sales analysis workflow</span></span>
+    ├── <span class="f">inventory-analysis-workflow.md</span> <span class="d"><span class="lang-zh inline">库存分析工作流</span><span class="lang-en inline">inventory analysis workflow</span></span>
+    ├── <span class="f">order-tracking-workflow.md</span>    <span class="d"><span class="lang-zh inline">订单追踪工作流</span><span class="lang-en inline">order tracking workflow</span></span>
+    ├── <span class="f">periodic-report-workflow.md</span>   <span class="d"><span class="lang-zh inline">周期性报表工作流</span><span class="lang-en inline">periodic report workflow</span></span>
+    └── <span class="f">customization-guide.md</span>        <span class="d"><span class="lang-zh inline">自定义与扩展指南</span><span class="lang-en inline">customization guide</span></span></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="brand" style="margin-bottom:10px;"><span class="dot"></span> Kingdee K3Cloud Skill</div>
+      <p class="lang-zh" style="max-width:320px;">Apache-2.0 © Adam Zhang（ClawHub 分发版本使用 MIT-0）。</p>
+      <p class="lang-en" style="max-width:320px;">Apache-2.0 © Adam Zhang (ClawHub distribution uses MIT-0).</p>
+    </div>
+    <div class="footlinks">
+      <a href="https://github.com/adamzhang1987/kingdee-k3cloud-skill" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases" target="_blank" rel="noopener">Releases</a>
+      <a href="https://github.com/adamzhang1987/kingdee-k3cloud-mcp" target="_blank" rel="noopener"><span class="lang-zh">配套 MCP</span><span class="lang-en">Companion MCP</span></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var body = document.body;
+    var btn = document.getElementById('langToggle');
+    function setLang(lang){
+      body.classList.toggle('lang-en', lang === 'en');
+      localStorage.setItem('kd-lang', lang);
+      document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+    }
+    var saved = localStorage.getItem('kd-lang') || 'zh';
+    setLang(saved);
+    btn.addEventListener('click', function(){
+      setLang(body.classList.contains('lang-en') ? 'zh' : 'en');
+    });
+
+    document.querySelectorAll('.card').forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--x', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--y', (e.clientY - r.top) + 'px');
+      });
+    });
+  })();
+</script>
+</body>
+</html>
