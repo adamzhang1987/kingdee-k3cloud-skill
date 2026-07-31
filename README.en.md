@@ -4,12 +4,16 @@
 
 [![CI](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-![Version](https://img.shields.io/badge/version-1.3.1-blue.svg)
-![Language](https://img.shields.io/badge/language-zh--CN-red.svg)
+[![Release](https://img.shields.io/github/v/release/adamzhang1987/kingdee-k3cloud-skill)](https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest)
 
-A Skill for Kingdee K3Cloud ERP, for any Skill-capable AI agent (Claude Code, openclaw, hermes, etc.). Injects form field knowledge, query patterns, and workflow guidance, significantly reducing trial and error.
+A Skill for Kingdee K3Cloud ERP, for any Skill-capable AI agent (Claude Code, Openclaw, etc.). Injects the "which form, which field, how to query efficiently" know-how directly into the agent, cutting down on field-guessing 500 errors and trial-and-error round trips.
 
-> **Using a plain MCP client?** If you use Claude Desktop, Cursor, Cline, Cherry Studio, or another MCP client without Skill support, simply configure [kingdee-k3cloud-mcp](https://github.com/adamzhang1987/kingdee-k3cloud-mcp) directly — no Skill installation required.
+**Core value:**
+- **Fewer failed calls**: ships with verified field names per module (`references/verified-fields.md`), avoiding K3Cloud 500 errors from guessed field names
+- **Encodes your own customizations**: every K3Cloud deployment has different custom fields (`F_` prefix) and business processes — `references/customization-guide.md` teaches the agent to discover your actual field structure via `query_metadata` and turn it into reusable knowledge, instead of hardcoding one company's fields
+- **Ready-made workflows**: optimal query paths for daily reports, customer lookups, sales/inventory analysis, order tracking, and more are already built in
+
+> **Using a plain MCP client (Claude Desktop, Cursor, Cline, Cherry Studio, etc. without Skill support)?** Configuring [kingdee-k3cloud-mcp](https://github.com/adamzhang1987/kingdee-k3cloud-mcp) directly gives you all 15 tools — this Skill is an optional enhancement, not a prerequisite. Without it, the agent just has to feel its way through field names by trial and error.
 
 ## Prerequisites
 
@@ -55,6 +59,17 @@ make build
 # Copy to skills directory
 cp kingdee-k3cloud.skill ~/.claude/skills/
 ```
+
+## Quick Start
+
+1. Set up the MCP Server first, following [kingdee-k3cloud-mcp](https://github.com/adamzhang1987/kingdee-k3cloud-mcp#quick-start) (5 environment variables)
+2. Install this Skill into your agent's skills directory as described above, then restart the agent
+3. Just ask in natural language — the agent consults the `SKILL.md` decision tree to pick the right form ID and field names automatically, e.g.:
+   - "Generate today's business report"
+   - "Show me recent orders from customer XX"
+   - "Which materials are below the safety stock threshold this month?"
+
+No extra configuration needed — the Skill triggers automatically based on the request.
 
 ## Directory Structure
 
