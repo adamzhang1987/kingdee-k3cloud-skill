@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-08-01
+
+### Added
+- `references/common-errors.md`: new "错误7: 权限不足 / 结果异常为空" entry documenting silent data-rule filtering (query succeeds but rows are filtered by the integration user's K3Cloud data permissions, with no error). Instructs the LLM not to assert "no data" on empty results without first checking for permission filtering.
+- Troubleshooting checklist: new item for comparing row counts against the K3Cloud web UI when results seem permission-filtered.
+
 ## [1.3.1] - 2026-04-22
 
 ### Added
@@ -50,7 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `references/periodic-report-workflow.md`, `customization-guide.md`
 - GitHub Actions release workflow: packages `.skill` file on tag push
 
-[Unreleased]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.3.1...HEAD
+[Unreleased]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.1.1...v1.2.0
