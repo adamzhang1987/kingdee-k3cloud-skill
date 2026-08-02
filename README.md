@@ -1,13 +1,19 @@
 # Kingdee K3Cloud ERP Skill
 
+[English](README.en.md) | [中文](README.md)
+
 [![CI](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/adamzhang1987/kingdee-k3cloud-skill/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)
-![Language](https://img.shields.io/badge/language-zh--CN-red.svg)
+[![Release](https://img.shields.io/github/v/release/adamzhang1987/kingdee-k3cloud-skill)](https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest)
 
-金蝶云星空 ERP 系统的 Claude Code Skill，为 Claude Code 注入表单字段、查询模式和工作流知识，大幅减少试错次数。
+面向支持 Skill 机制的 AI Agent（Claude Code、Openclaw 等）的金蝶云星空 ERP Skill，把「哪个表单用哪个字段、怎么查最省 token」这类踩坑经验直接注入 Agent，大幅减少字段猜测导致的 500 错误和试错往返。
 
-> **使用其他 AI 客户端？** 本 Skill 是 Claude Code 专属的知识增强插件。如果你使用 Claude Desktop、Cursor、Cline、Cherry Studio、Openclaw 等其他支持 MCP 协议的客户端，直接配置 [kingdee-k3cloud-mcp](https://github.com/adamzhang1987/kingdee-k3cloud-mcp) 即可使用全部工具，无需安装本 Skill。
+**核心价值：**
+- **减少试错**：内置各模块已验证字段名（`references/verified-fields.md`），避免因猜字段名触发金蝶 500 错误
+- **封装你自己的二开知识**：每家金蝶部署都有不同的自定义字段（`F_` 前缀）和业务流程——`references/customization-guide.md` 教 Agent 用 `query_metadata` 自动发现你的实际字段结构，并沉淀成可复用的知识，而不是写死某一家公司的字段
+- **完整工作流**：经营日报、客户查询、销售/库存分析、订单追踪等场景的最优查询路径已预置好
+
+> **只用纯 MCP 客户端（Claude Desktop、Cursor、Cline、Cherry Studio 等不支持 Skill 机制）？** 直接配置 [kingdee-k3cloud-mcp](https://github.com/adamzhang1987/kingdee-k3cloud-mcp) 也能用全部 15 个工具——本 Skill 是可选增强，不是前提条件；但少了它，Agent 需要自己反复试错才能摸清字段名。
 
 ## 前提条件
 
@@ -15,29 +21,29 @@
 
 **整体架构：**
 ```
-Claude Code（安装本 Skill）
+支持 Skill 的 Agent（安装本 Skill）
        │ 知识注入（表单ID、字段名、工作流）
        ↓
-Claude Code + MCP 工具（query_bill_json、view_bill 等）
+Agent + MCP 工具（query_bill_json、view_bill 等）
        │ Kingdee Web API
        ↓
 金蝶云星空 K3Cloud
 ```
 
-> MCP Server 本身兼容所有支持 MCP 协议的客户端（Claude Desktop、Cursor、Cline、Openclaw 等）。本 Skill 仅面向 Claude Code，为其提供额外的领域知识注入。
+> MCP Server 本身兼容所有支持 MCP 协议的客户端（Claude Desktop、Cursor、Cline、Openclaw 等）。本 Skill 面向支持 Skill 机制的 AI Agent（Claude Code、openclaw、hermes 等），为其提供额外的领域知识注入。
 
-- **Skill（本项目）** = 知识库 + 工作流决策树（Claude Code 专属），让 Claude 自动掌握正确的 API 用法，避免字段名错误
+- **Skill（本项目）** = 知识库 + 工作流决策树，让 Agent 自动掌握正确的 API 用法，避免字段名错误
 - **MCP Server** = 执行引擎，提供 15 个实际的 API 工具，适用于所有 MCP 客户端
 
-两者可分别使用，但在 Claude Code 中组合使用效果最佳。
+两者可分别使用，但在支持 Skill 的 Agent 中组合使用效果最佳。
 
 ## 安装方式
 
 ### 方式一：手动安装（推荐）
 
 1. 前往 [Releases 页面](https://github.com/adamzhang1987/kingdee-k3cloud-skill/releases/latest)，下载 `kingdee-k3cloud.skill`
-2. 将文件放入 Claude Code 的 skills 目录（通常为 `~/.claude/skills/`）
-3. 重启 Claude Code 使 skill 生效
+2. 将文件放入你的 Agent 的 skills 目录（如 Claude Code 通常为 `~/.claude/skills/`）
+3. 重启 Agent 使 skill 生效
 
 ### 🚧 方式二：从 Skill Hub 安装（即将支持）
 
@@ -53,6 +59,17 @@ make build
 # 将 kingdee-k3cloud.skill 复制到 skills 目录
 cp kingdee-k3cloud.skill ~/.claude/skills/
 ```
+
+## 快速开始
+
+1. 先按 [kingdee-k3cloud-mcp](https://github.com/adamzhang1987/kingdee-k3cloud-mcp#快速开始) 的说明配置好 MCP Server（5 个环境变量）
+2. 按上方「安装方式」把本 Skill 放进 Agent 的 skills 目录，重启 Agent
+3. 直接用自然语言提问，Agent 会自动查阅 `SKILL.md` 决策树选用正确的表单 ID 和字段名，例如：
+   - 「生成今天的经营日报」
+   - 「查一下 XX 客户最近的订单」
+   - 「这个月哪些物料库存低于安全线」
+
+无需额外配置——Skill 触发是自动的，Agent 会根据请求内容自行判断是否需要加载。
 
 ## 目录结构
 
@@ -91,6 +108,16 @@ kingdee-k3cloud/
 
 主文件保持精简（<300 行），详细的字段验证表、查询模板、错误处理等放在 `references/` 中按需引用。
 
+## 贡献者
+
+<a href="https://github.com/adamzhang1987/kingdee-k3cloud-skill/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=adamzhang1987/kingdee-k3cloud-skill" alt="Contributors" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
 ## License
 
 [Apache-2.0](LICENSE) © Adam Zhang
+
+> ClawHub 分发版本使用 MIT-0（符合 ClawHub 注册政策）；源码仓库维持 Apache-2.0。

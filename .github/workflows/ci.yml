@@ -10,7 +10,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Validate registry.json
         run: python3 -c "import json, sys; json.load(open('registry.json')); print('registry.json is valid')"
@@ -42,12 +42,12 @@ jobs:
           EOF
 
       - name: Markdown lint
-        uses: DavidAnson/markdownlint-cli2-action@v19
+        uses: DavidAnson/markdownlint-cli2-action@v24
         with:
           globs: '**/*.md'
 
       - name: Link check
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-progress --exclude-mail './**/*.md'
+          args: --no-progress './**/*.md'
           fail: true
