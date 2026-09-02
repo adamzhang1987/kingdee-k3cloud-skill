@@ -18,7 +18,8 @@
 
 1. 更新 `registry.json` 中 `version`
 2. `git add registry.json && git commit`
-3. `git tag vX.Y.Z && git push && git push origin vX.Y.Z`
+3. `git tag vX.Y.Z && git push origin main vX.Y.Z`
+   （**一条命令同推 main 与 tag**：分两次推会让 CI 在 tag 尚不存在时就跑，CHANGELOG 里新增的 `compare/vX.Y.Z...` 链接会被链接检查判为 404）
    → 触发 GitHub Actions release workflow → 打包 `.skill` 并创建 GitHub Release
 
 ## 关键文件
