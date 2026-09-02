@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-09-02
+
+### Changed
+- **重写「错误3: 会话信息已丢失」整节**（`references/common-errors.md`）。经三轮实证测试
+  （约 240 次只读请求，见 mcp 仓库 `docs/session-auth-experiments.md`）确认，该错误**不是
+  会话过期，而是认证失败**（`MsgCode=1`）。原有指引与实测结论直接冲突，且其中一条有害：
+  - 删除「自动重试：MCP 服务器应实现自动重连」——重试不可能修复凭据错误；
+  - 删除「联系管理员**重启 MCP 服务**」——在改正配置**之前**重启会把偶发问题变成持续问题
+    （凭据错误本可被一个仍有效的 SID 掩盖，新进程没有 SID 就必须走凭据校验）；
+  - 改为四项凭据核对清单（`KD_USERNAME` / `KD_APP_ID` / `KD_APP_SEC` / `KD_LCID`），
+    并区分「改金蝶端无需重启」与「改 .env 必须重启」两条生效路径；
+  - 补充说明 `KD_ACCT_ID` 错误表现为 HTTP 非 200、`KD_ORG_NUM` 错误不产生该错误。
+- 决策树第 4 条「会话是否过期？→ 重试操作」前提错误，已改为指向错误3 并明确不要重试、
+  不要建议重启。
+- 记录 MCP Server ≥ 1.4.0 会把该错误包成带诊断的 envelope
+  （`{error, message, hint, original}`）。
+
 ## [1.4.0] - 2026-08-01
 
 ### Added
@@ -56,7 +73,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `references/periodic-report-workflow.md`, `customization-guide.md`
 - GitHub Actions release workflow: packages `.skill` file on tag push
 
-[Unreleased]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/adamzhang1987/kingdee-k3cloud-skill/compare/v1.2.0...v1.3.0
