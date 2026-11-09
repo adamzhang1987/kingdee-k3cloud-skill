@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- 同步 MCP Server 1.4.2 的文件导出安全边界：`output_path` 只传文件名，导出到
+  `KD_EXPORT_DIR` 或独立系统临时目录，不覆盖已有文件，使用返回的绝对 `path` 读取结果。
+- 更新主技能和销售分析工作流中的绝对路径示例，并补充 MCP 1.x 升级说明。
+
 ## [1.5.0] - 2026-09-02
 
 ### Changed

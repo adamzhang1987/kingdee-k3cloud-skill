@@ -166,10 +166,17 @@ filter_string="FDate >= '2025-02-01' AND FDate < '2025-03-01' AND FDocumentStatu
 | 单月 | `query_bill_json`, top_count=2000 | 接近上限时翻页 |
 | 跨月/跨季度/跨年 | `query_bill_range`（mcp ≥ 1.2.0） | 自动分片 + 落盘，不受 1MB 限制 |
 
-### 推荐做法（mcp ≥ 1.2.0）
+### 推荐做法（mcp ≥ 1.4.2）
+
+`output_path` 只填文件名，保存到 `KD_EXPORT_DIR` 或服务实例的独立系统临时目录，不覆盖已有文件。
+从 MCP 1.4.1 及更早版本升级时将旧路径的目录配置为 `KD_EXPORT_DIR`；读取结果使用返回的绝对 `path`。
+
 ```python
+import json
+import pandas as pd
+
 # 全年销售数据，按月自动分片写入文件
-query_bill_range(
+result = json.loads(query_bill_range(
     form_id="SAL_SaleOrder",
     field_keys="FBillNo,FDate,FCustId.FName,FSalerId.FName,FAllAmount,FDocumentStatus",
     date_field="FDate",
@@ -177,8 +184,11 @@ query_bill_range(
     date_to="2026-01-01",
     extra_filter="FDocumentStatus = 'C'",
     chunk="month",
-    output_path="/tmp/sales_2025.ndjson"
-)
+    output_path="sales_2025.ndjson"
+))
+if "error" in result:
+    raise RuntimeError(result["error"])
+df = pd.read_json(result["path"], lines=True)
 ```
 
 ### 兜底做法（mcp < 1.2.0）
