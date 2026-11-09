@@ -40,11 +40,11 @@ description: "Use this skill whenever working with Kingdee K3Cloud ERP system (�
    → 一次性 query_bill_json，top_count=2000
 
 ④ estimated_rows > 2000 或 is_exact=false（≥ 5000）
-   → 优先调用（mcp ≥ 1.2.0）：
+   → 优先调用（以下落盘示例要求 mcp ≥ 1.4.2）：
        query_bill_range(
            form_id, field_keys,
            date_field="FDate", date_from="YYYY-01-01", date_to="YYYY+1-01-01",
-           chunk="month", output_path="/tmp/output.ndjson"
+           chunk="month", output_path="output.ndjson"
        )
    → 兜底做法（mcp < 1.2.0）：
        for month in 月份范围:
@@ -59,20 +59,31 @@ description: "Use this skill whenever working with Kingdee K3Cloud ERP system (�
    → 只重试当前片，已翻过的月份无需重跑
 ```
 
-### 推荐做法（mcp ≥ 1.2.0）— 直接落盘，无需手动循环
+### 推荐做法（mcp ≥ 1.4.2）— 直接落盘，无需手动循环
+
+`output_path` 只填文件名，不接受目录，也不覆盖已有文件；重名时换一个文件名。
+服务保存到管理员配置的 `KD_EXPORT_DIR`，未配置时使用本实例的独立系统临时目录。
+始终读取返回的绝对 `path`，不要自行拼接保存路径；远程部署的路径属于服务器。
+从 MCP 1.4.1 及更早版本升级时，将原路径的目录配置为 `KD_EXPORT_DIR`，调用只保留文件名。
 
 ```python
+import json
+import pandas as pd
+
 # 跨年查询，按月自动分片，流式写入本地文件
-query_bill_range(
+result = json.loads(query_bill_range(
     form_id="SAL_SaleOrder",
     field_keys="FBillNo,FDate,FCustId.FName,FAllAmount",
     date_field="FDate",
     date_from="2025-01-01",
     date_to="2026-01-01",
     chunk="month",
-    output_path="/tmp/sales_2025.ndjson"
-)
-# 返回：{"path": "/tmp/sales_2025.ndjson", "row_count": N, "bytes": M, "chunks": 12}
+    output_path="sales_2025.ndjson"
+))
+if "error" in result:
+    raise RuntimeError(result["error"])
+# 使用工具实际返回的路径，例如交由 pandas 处理
+df = pd.read_json(result["path"], lines=True)
 ```
 
 ### 兜底翻页示例（mcp < 1.2.0 或单月数据超过 2000 行）
